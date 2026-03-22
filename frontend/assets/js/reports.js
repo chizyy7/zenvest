@@ -5,28 +5,11 @@
  */
 
 import { getToken } from './auth.js';
+import { showToast as toast } from './utils.js';
 
 const API_URL = window.API_URL || 'https://zenvest-api.railway.app';
 
-/**
- * Display a toast notification
- * @param {string} msg
- * @param {'success'|'error'|'info'} type
- */
-function toast(msg, type = 'info') {
-  const container = document.getElementById('toast-container');
-  if (!container) return;
-  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
-  const el = document.createElement('div');
-  el.className = `toast toast-${type}`;
-  const safe = msg.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  el.innerHTML = `<span class="toast-icon">${icons[type]}</span><span>${safe}</span>`;
-  container.appendChild(el);
-  setTimeout(() => {
-    el.style.animation = 'toast-out 0.3s ease forwards';
-    setTimeout(() => el.remove(), 300);
-  }, 4000);
-}
+// toast imported from utils.js above
 
 /**
  * Generate and download a PDF financial report for a given month

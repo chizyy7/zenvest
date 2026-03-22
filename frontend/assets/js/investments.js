@@ -4,45 +4,14 @@
  */
 
 import { getToken } from './auth.js';
+import { escapeHtml, showToast as toast } from './utils.js';
 
 const API_URL = window.API_URL || 'https://zenvest-api.railway.app';
 
 /** @type {Array<Object>} Cached recommendations */
 let recommendations = [];
 
-/**
- * Escape HTML to prevent XSS
- * @param {string} str
- * @returns {string}
- */
-function escapeHtml(str) {
-  if (!str) return '';
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-/**
- * Display a toast notification
- * @param {string} msg
- * @param {'success'|'error'|'info'} type
- */
-function toast(msg, type = 'info') {
-  const container = document.getElementById('toast-container');
-  if (!container) return;
-  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
-  const el = document.createElement('div');
-  el.className = `toast toast-${type}`;
-  el.innerHTML = `<span class="toast-icon">${icons[type]}</span><span>${escapeHtml(msg)}</span>`;
-  container.appendChild(el);
-  setTimeout(() => {
-    el.style.animation = 'toast-out 0.3s ease forwards';
-    setTimeout(() => el.remove(), 300);
-  }, 3500);
-}
+// escapeHtml and toast imported from utils.js above
 
 // Asset type metadata
 const ASSET_META = {

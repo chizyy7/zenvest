@@ -54,7 +54,7 @@ async def create_snapshot(
     """Save a new net worth snapshot for the current date."""
     assets = (
         payload.savings + payload.investments +
-        payload.crypto  + getattr(payload, "property", 0)
+        payload.crypto  + payload.property
     )
     liabilities = payload.loans + payload.credit_cards + payload.other_debt
     net_worth   = assets - liabilities
@@ -68,7 +68,7 @@ async def create_snapshot(
         "savings":          round(payload.savings, 2),
         "investments":      round(payload.investments, 2),
         "crypto":           round(payload.crypto, 2),
-        "property":         round(getattr(payload, "property", 0), 2),
+        "property":         round(payload.property, 2),
         "loans":            round(payload.loans, 2),
         "credit_cards":     round(payload.credit_cards, 2),
         "other_debt":       round(payload.other_debt, 2),
