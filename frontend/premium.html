@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Upgrade to Zenvest Premium — unlock AI insights, net worth tracking, goal planner and more" />
+  <title>Go Premium — Zenvest 💎</title>
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230D1117'/><text x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-size='18'>💎</text></svg>" />
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="navbar scrolled" role="navigation" aria-label="Main navigation">
+  <div class="container navbar-inner">
+    <a href="app.html" class="navbar-logo" aria-label="Back to dashboard">
+      <div class="navbar-logo-mark" aria-hidden="true">💎</div>
+      <span class="navbar-logo-text">Zenvest</span>
+    </a>
+    <a href="app.html" class="btn btn-ghost btn-sm">← Back to Dashboard</a>
+  </div>
+</nav>
+
+<main>
+  <!-- Hero -->
+  <section class="premium-hero" style="padding-top:7rem;" aria-labelledby="premium-heading">
+    <div style="position:relative;z-index:1;">
+      <div class="hero-eyebrow" style="margin:0 auto 1.5rem;display:inline-flex;">
+        <span aria-hidden="true">💎</span>
+        <span>Zenvest Premium</span>
+      </div>
+
+      <h1 class="font-display" style="font-size:clamp(2.25rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem;" id="premium-heading">
+        Unlock your full<br />
+        <span class="gradient-text-gold">financial potential.</span>
+      </h1>
+
+      <p style="font-size:1.0625rem;color:var(--text-secondary);max-width:480px;margin:0 auto 2.5rem;line-height:1.7;">
+        Premium gives you everything you need to track wealth, hit your goals,
+        and invest with AI-backed confidence.
+      </p>
+
+      <!-- Pricing Cards -->
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem;">
+
+        <!-- Monthly -->
+        <div class="card" style="width:240px;text-align:center;cursor:pointer;transition:all 0.2s;"
+          onclick="selectPlan('monthly')" id="plan-monthly" role="option" aria-selected="true"
+          tabindex="0" onkeydown="if(event.key==='Enter')selectPlan('monthly')"
+          style="border-color:var(--border-gold);box-shadow:var(--shadow-gold);">
+          <p class="pricing-tier" style="color:var(--color-gold);">Monthly</p>
+          <div class="pricing-price" style="justify-content:center;">
+            <span class="price-currency" style="color:var(--color-gold);">$</span>
+            <span class="price-amount gradient-text-gold">7.99</span>
+          </div>
+          <p style="font-size:0.875rem;color:var(--text-muted);">per month</p>
+        </div>
+
+        <!-- Annual -->
+        <div class="card" style="width:240px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;"
+          onclick="selectPlan('annual')" id="plan-annual" role="option" aria-selected="false"
+          tabindex="0" onkeydown="if(event.key==='Enter')selectPlan('annual')">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--color-profit);color:#080B14;font-size:0.6875rem;font-weight:800;padding:0.25rem 0.875rem;border-radius:999px;white-space:nowrap;">
+            SAVE 37%
+          </div>
+          <p class="pricing-tier">Annual</p>
+          <div class="pricing-price" style="justify-content:center;">
+            <span class="price-currency">$</span>
+            <span class="price-amount">59.99</span>
+          </div>
+          <p style="font-size:0.875rem;color:var(--text-muted);">per year · ~$5/month</p>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem;">
+        <button class="btn btn-gold btn-lg" onclick="initPaystack()" id="upgrade-btn" style="min-width:280px;">
+          💎 Upgrade Now
+        </button>
+        <p style="margin-top:1rem;font-size:0.8125rem;color:var(--text-muted);">
+          Secure payment via Paystack · Cancel anytime · Instant access
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Comparison -->
+  <section style="padding:4rem 0 6rem;" aria-labelledby="comparison-heading">
+    <div class="container">
+      <div class="section-header" style="margin-bottom:3rem;">
+        <h2 class="section-title-large font-display" id="comparison-heading">What you unlock with Premium</h2>
+      </div>
+
+      <div class="premium-comparison" style="max-width:800px;margin:0 auto;">
+        <!-- Free -->
+        <div class="comparison-card">
+          <div class="comparison-header">
+            <p style="font-weight:700;font-size:1.125rem;">Free</p>
+            <p style="font-size:0.9375rem;color:var(--text-muted);margin-top:0.25rem;">Always available</p>
+          </div>
+          <div class="comparison-body">
+            <div class="comparison-feature-row"><span class="check" aria-label="Included">✓</span> Budget &amp; expense tracking</div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included">✓</span> Spending donut charts</div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included">✓</span> 3 AI recommendations/month</div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included">✓</span> Weekly email reports (n8n)</div>
+            <div class="comparison-feature-row"><span class="cross" aria-label="Not included">–</span> Net worth dashboard</div>
+            <div class="comparison-feature-row"><span class="cross" aria-label="Not included">–</span> Financial goals tracker</div>
+            <div class="comparison-feature-row"><span class="cross" aria-label="Not included">–</span> AI chat with Zen (GPT-4o)</div>
+            <div class="comparison-feature-row"><span class="cross" aria-label="Not included">–</span> Unlimited AI recommendations</div>
+            <div class="comparison-feature-row"><span class="cross" aria-label="Not included">–</span> Stock &amp; crypto tracker</div>
+            <div class="comparison-feature-row"><span class="cross" aria-label="Not included">–</span> PDF financial reports</div>
+            <div class="comparison-feature-row"><span class="cross" aria-label="Not included">–</span> Price alerts via email</div>
+          </div>
+        </div>
+
+        <!-- Premium -->
+        <div class="comparison-card premium">
+          <div class="comparison-header" style="background:rgba(245,200,66,0.05);border-color:var(--border-gold);">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <p style="font-weight:700;font-size:1.125rem;color:var(--color-gold);">Premium 💎</p>
+              <span class="badge" style="background:var(--color-gold-dim);color:var(--color-gold);font-size:0.6875rem;">Most Popular</span>
+            </div>
+            <p style="font-size:0.9375rem;color:var(--text-secondary);margin-top:0.25rem;">$7.99/month or $59.99/year</p>
+          </div>
+          <div class="comparison-body">
+            <div class="comparison-feature-row"><span class="check" aria-label="Included">✓</span> Everything in Free</div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included">✓</span> Spending donut charts</div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included">✓</span> Unlimited AI recommendations</div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included">✓</span> Weekly email reports (n8n)</div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included" style="color:var(--color-gold)">★</span> <strong>Net worth dashboard</strong></div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included" style="color:var(--color-gold)">★</span> <strong>Financial goals tracker</strong></div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included" style="color:var(--color-gold)">★</span> <strong>AI chat with Zen (GPT-4o)</strong></div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included" style="color:var(--color-gold)">★</span> <strong>Unlimited AI recommendations</strong></div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included" style="color:var(--color-gold)">★</span> <strong>Stock &amp; crypto tracker</strong></div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included" style="color:var(--color-gold)">★</span> <strong>PDF financial reports</strong></div>
+            <div class="comparison-feature-row"><span class="check" aria-label="Included" style="color:var(--color-gold)">★</span> <strong>Price alerts via email</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:3rem;">
+        <button class="btn btn-gold btn-lg" onclick="initPaystack()" style="min-width:280px;">
+          Start Premium Today →
+        </button>
+        <p style="margin-top:0.875rem;font-size:0.875rem;color:var(--text-muted);">
+          Join thousands of investors growing their wealth with Zenvest Premium
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQs -->
+  <section style="padding:3rem 0 6rem;border-top:1px solid var(--border);" aria-labelledby="faq-heading">
+    <div class="container" style="max-width:640px;">
+      <h2 class="section-title-large font-display" style="text-align:center;margin-bottom:2.5rem;" id="faq-heading">
+        Frequently asked questions
+      </h2>
+
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <details class="card" style="cursor:pointer;">
+          <summary style="font-weight:600;font-size:0.9375rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            Can I cancel anytime?
+            <span aria-hidden="true">+</span>
+          </summary>
+          <p style="margin-top:0.875rem;color:var(--text-secondary);font-size:0.9375rem;">
+            Yes! You can cancel your Premium subscription at any time. You'll keep access until the end of your billing period.
+          </p>
+        </details>
+
+        <details class="card" style="cursor:pointer;">
+          <summary style="font-weight:600;font-size:0.9375rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            Is my financial data secure?
+            <span aria-hidden="true">+</span>
+          </summary>
+          <p style="margin-top:0.875rem;color:var(--text-secondary);font-size:0.9375rem;">
+            Absolutely. All data is encrypted at rest and in transit. We use Supabase (PostgreSQL) with row-level security. Your data is never sold or shared.
+          </p>
+        </details>
+
+        <details class="card" style="cursor:pointer;">
+          <summary style="font-weight:600;font-size:0.9375rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            What payment methods are accepted?
+            <span aria-hidden="true">+</span>
+          </summary>
+          <p style="margin-top:0.875rem;color:var(--text-secondary);font-size:0.9375rem;">
+            We accept all major credit/debit cards and bank transfers via Paystack. Payments are processed securely by Paystack.
+          </p>
+        </details>
+
+        <details class="card" style="cursor:pointer;">
+          <summary style="font-weight:600;font-size:0.9375rem;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+            Is this real financial advice?
+            <span aria-hidden="true">+</span>
+          </summary>
+          <p style="margin-top:0.875rem;color:var(--text-secondary);font-size:0.9375rem;">
+            Zenvest provides educational investment information and AI-powered insights, not regulated financial advice. Always consult a qualified financial advisor for personal investment decisions.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Toast container -->
+<div id="toast-container" role="region" aria-label="Notifications" aria-live="polite"></div>
+
+<!-- Supabase + Paystack -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script type="module" src="assets/js/premium.js"></script>
+
+<script>
+  let selectedPlan = 'monthly';
+
+  /**
+   * Select a pricing plan
+   * @param {string} plan - 'monthly' or 'annual'
+   */
+  function selectPlan(plan) {
+    selectedPlan = plan;
+    const monthly = document.getElementById('plan-monthly');
+    const annual  = document.getElementById('plan-annual');
+
+    if (plan === 'monthly') {
+      monthly.style.borderColor = 'var(--border-gold)';
+      monthly.style.boxShadow   = 'var(--shadow-gold)';
+      annual.style.borderColor  = 'var(--border)';
+      annual.style.boxShadow    = 'none';
+      monthly.setAttribute('aria-selected', 'true');
+      annual.setAttribute('aria-selected', 'false');
+      document.getElementById('upgrade-btn').textContent = '💎 Upgrade Now — $7.99/month';
+    } else {
+      annual.style.borderColor  = 'var(--border-gold)';
+      annual.style.boxShadow    = 'var(--shadow-gold)';
+      monthly.style.borderColor = 'var(--border)';
+      monthly.style.boxShadow   = 'none';
+      annual.setAttribute('aria-selected', 'true');
+      monthly.setAttribute('aria-selected', 'false');
+      document.getElementById('upgrade-btn').textContent = '💎 Upgrade Now — $59.99/year';
+    }
+  }
+
+  // Initialize monthly as selected
+  selectPlan('monthly');
+
+  /**
+   * Initialize Paystack payment flow
+   */
+  function initPaystack() {
+    // Delegate to premium.js module
+    if (window.initPremiumPayment) {
+      window.initPremiumPayment(selectedPlan);
+    } else {
+      // Fallback: redirect to app upgrade view
+      const token = localStorage.getItem('zenvest_token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+      window.location.href = 'app.html';
+    }
+  }
+</script>
+</body>
+</html>

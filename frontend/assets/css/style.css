@@ -1,0 +1,726 @@
+/* ============================================================
+   Zenvest Design System — style.css
+   Global tokens, resets, and utility components
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+
+/* ============================================================
+   1. CSS Custom Properties (Design Tokens)
+   ============================================================ */
+:root {
+  /* Backgrounds */
+  --bg-primary:    #080B14;
+  --bg-surface:    #0D1117;
+  --bg-card:       #111827;
+  --bg-card-hover: #1A2332;
+  --bg-input:      #161D2B;
+
+  /* Brand Colors */
+  --color-zen:     #7FFFD4;
+  --color-zen-dim: rgba(127, 255, 212, 0.1);
+  --color-zen-20:  rgba(127, 255, 212, 0.2);
+  --color-gold:    #F5C842;
+  --color-gold-dim:rgba(245, 200, 66, 0.15);
+  --color-profit:  #00D98B;
+  --color-loss:    #FF4D6D;
+  --color-purple:  #8B5CF6;
+  --color-purple-dim: rgba(139, 92, 246, 0.15);
+
+  /* Text */
+  --text-primary:   #F0F4F8;
+  --text-secondary: #8896A7;
+  --text-muted:     #4B5563;
+
+  /* Borders */
+  --border:      rgba(255, 255, 255, 0.06);
+  --border-zen:  rgba(127, 255, 212, 0.2);
+  --border-gold: rgba(245, 200, 66, 0.25);
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-zen:  0 0 30px rgba(127, 255, 212, 0.1);
+  --shadow-gold: 0 0 30px rgba(245, 200, 66, 0.15);
+  --shadow-lg:   0 8px 40px rgba(0, 0, 0, 0.5);
+
+  /* Spacing */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Typography */
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Syne', 'Inter', sans-serif;
+
+  /* Transitions */
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   2. Global Reset & Base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--color-zen);
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+img, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  border: none;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: var(--font-sans);
+  outline: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+/* ============================================================
+   3. Custom Scrollbar
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(127, 255, 212, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(127, 255, 212, 0.4);
+}
+
+/* ============================================================
+   4. Typography Utilities
+   ============================================================ */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-zen   { color: var(--color-zen); }
+.text-gold  { color: var(--color-gold); }
+.text-profit{ color: var(--color-profit); }
+.text-loss  { color: var(--color-loss); }
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+
+.text-sm   { font-size: 0.875rem; }
+.text-xs   { font-size: 0.75rem; }
+.text-lg   { font-size: 1.125rem; }
+.text-xl   { font-size: 1.25rem; }
+.text-2xl  { font-size: 1.5rem; }
+.text-3xl  { font-size: 1.875rem; }
+
+.font-medium  { font-weight: 500; }
+.font-semibold{ font-weight: 600; }
+.font-bold    { font-weight: 700; }
+
+/* ============================================================
+   5. Layout Utilities
+   ============================================================ */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 1rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-6 { gap: 1.5rem; }
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   6. Card Component
+   ============================================================ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+}
+
+.card-zen {
+  border-color: var(--border-zen);
+  box-shadow: var(--shadow-card), var(--shadow-zen);
+}
+
+.card-gold {
+  border-color: var(--border-gold);
+  box-shadow: var(--shadow-card), var(--shadow-gold);
+}
+
+/* ============================================================
+   7. Button Variants
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: all var(--transition);
+  white-space: nowrap;
+  border: none;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Aquamarine primary */
+.btn-zen {
+  background: var(--color-zen);
+  color: #080B14;
+}
+
+.btn-zen:hover:not(:disabled) {
+  background: #6af0c3;
+  box-shadow: 0 0 20px rgba(127, 255, 212, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Gold premium */
+.btn-gold {
+  background: var(--color-gold);
+  color: #080B14;
+}
+
+.btn-gold:hover:not(:disabled) {
+  background: #f7d35e;
+  box-shadow: 0 0 20px rgba(245, 200, 66, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Ghost transparent */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--bg-card);
+  border-color: var(--border-zen);
+  color: var(--color-zen);
+}
+
+/* Outlined zen */
+.btn-outline-zen {
+  background: transparent;
+  color: var(--color-zen);
+  border: 1px solid var(--border-zen);
+}
+
+.btn-outline-zen:hover:not(:disabled) {
+  background: var(--color-zen-dim);
+  box-shadow: 0 0 15px rgba(127, 255, 212, 0.15);
+}
+
+/* Danger */
+.btn-danger {
+  background: rgba(255, 77, 109, 0.15);
+  color: var(--color-loss);
+  border: 1px solid rgba(255, 77, 109, 0.2);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: rgba(255, 77, 109, 0.25);
+}
+
+/* Sizes */
+.btn-sm {
+  padding: 0.4rem 0.875rem;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 0.875rem 1.75rem;
+  font-size: 1.0625rem;
+}
+
+.btn-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   8. Input / Form Styles
+   ============================================================ */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--border-zen);
+  box-shadow: 0 0 0 3px var(--color-zen-dim);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238896A7' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ============================================================
+   9. Badge Styles
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-free {
+  background: rgba(136, 150, 167, 0.15);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.badge-premium {
+  background: var(--color-purple-dim);
+  color: var(--color-purple);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.2);
+}
+
+.badge-profit {
+  background: rgba(0, 217, 139, 0.15);
+  color: var(--color-profit);
+  border: 1px solid rgba(0, 217, 139, 0.2);
+}
+
+.badge-loss {
+  background: rgba(255, 77, 109, 0.15);
+  color: var(--color-loss);
+  border: 1px solid rgba(255, 77, 109, 0.2);
+}
+
+.badge-low    { background: rgba(0, 217, 139, 0.15); color: var(--color-profit); }
+.badge-medium { background: rgba(245, 200, 66, 0.15); color: var(--color-gold); }
+.badge-high   { background: rgba(255, 77, 109, 0.15); color: var(--color-loss); }
+
+/* ============================================================
+   10. Loading Skeleton
+   ============================================================ */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-card) 25%,
+    var(--bg-card-hover) 50%,
+    var(--bg-card) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+  height: 1rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-text.short { width: 60%; }
+.skeleton-text.medium { width: 80%; }
+
+.skeleton-block {
+  height: 120px;
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+/* ============================================================
+   11. Toast Notification System
+   ============================================================ */
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  pointer-events: all;
+  animation: toast-in 0.3s ease forwards;
+  max-width: 360px;
+  min-width: 260px;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(20px); }
+}
+
+.toast-success {
+  border-color: rgba(0, 217, 139, 0.3);
+  background: rgba(0, 217, 139, 0.08);
+}
+
+.toast-success .toast-icon { color: var(--color-profit); font-size: 1.25rem; }
+
+.toast-error {
+  border-color: rgba(255, 77, 109, 0.3);
+  background: rgba(255, 77, 109, 0.08);
+}
+
+.toast-error .toast-icon { color: var(--color-loss); font-size: 1.25rem; }
+
+.toast-info {
+  border-color: var(--border-zen);
+  background: var(--color-zen-dim);
+}
+
+.toast-info .toast-icon { color: var(--color-zen); font-size: 1.25rem; }
+
+/* ============================================================
+   12. Modal Base
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 11, 20, 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fade-in 0.2s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: var(--shadow-lg);
+  animation: modal-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition);
+  line-height: 1;
+}
+
+.modal-close:hover { color: var(--text-primary); }
+
+/* ============================================================
+   13. Divider
+   ============================================================ */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1rem 0;
+}
+
+/* ============================================================
+   14. Lock / Premium Overlay
+   ============================================================ */
+.premium-lock {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 11, 20, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+}
+
+.premium-lock .lock-icon {
+  font-size: 2.5rem;
+}
+
+.premium-lock h3 {
+  font-size: 1.125rem;
+  color: var(--text-primary);
+}
+
+.premium-lock p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 260px;
+}
+
+/* ============================================================
+   15. Spinner
+   ============================================================ */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--color-zen);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+/* ============================================================
+   16. Section Titles
+   ============================================================ */
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* ============================================================
+   17. Progress Bar
+   ============================================================ */
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-zen), #5ee8b5);
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-bar-fill.gold {
+  background: linear-gradient(90deg, var(--color-gold), #f7d35e);
+}
+
+/* ============================================================
+   18. Number Counter Animation
+   ============================================================ */
+.count-up {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   19. Gradient Text
+   ============================================================ */
+.gradient-text-zen {
+  background: linear-gradient(135deg, var(--color-zen), #5ee8b5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, var(--color-gold), #f7d35e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   20. Confetti Animation
+   ============================================================ */
+@keyframes confetti-fall {
+  0%   { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -20px;
+  animation: confetti-fall linear forwards;
+  z-index: 9998;
+  pointer-events: none;
+}

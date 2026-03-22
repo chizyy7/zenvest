@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Set up your Zenvest financial profile" />
+  <meta name="robots" content="noindex" />
+  <title>Financial Profile — Zenvest 💎</title>
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230D1117'/><text x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-size='18'>💎</text></svg>" />
+</head>
+<body>
+
+<div class="onboarding-shell">
+  <!-- Header -->
+  <header class="onboarding-header" role="banner">
+    <a href="index.html" class="navbar-logo" aria-label="Zenvest home">
+      <div class="navbar-logo-mark" aria-hidden="true">💎</div>
+      <span class="navbar-logo-text">Zenvest</span>
+    </a>
+
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span class="text-sm text-secondary" id="step-counter" aria-live="polite">Step 1 of 5</span>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="skipOnboarding()" aria-label="Skip quiz and go to dashboard">
+        Skip for now
+      </button>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="onboarding-progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" aria-label="Quiz progress">
+    <div class="onboarding-progress-fill" id="progress-fill" style="width:20%"></div>
+  </div>
+
+  <!-- Quiz Body -->
+  <div class="onboarding-body">
+
+    <!-- Step 1: Age Range -->
+    <div class="quiz-step active" id="step-1" aria-label="Question 1 of 5">
+      <p class="quiz-step-num">Question 1 of 5</p>
+      <h2 class="quiz-question font-display">What's your age range?</h2>
+
+      <div class="quiz-options" role="group" aria-label="Age range options">
+        <button class="quiz-option" data-value="0" onclick="selectOption(this, 1)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🎓</span>
+          18 – 25
+        </button>
+        <button class="quiz-option" data-value="1" onclick="selectOption(this, 1)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">💼</span>
+          26 – 35
+        </button>
+        <button class="quiz-option" data-value="2" onclick="selectOption(this, 1)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🏠</span>
+          36 – 45
+        </button>
+        <button class="quiz-option" data-value="3" onclick="selectOption(this, 1)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🌟</span>
+          46+
+        </button>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:1rem;">
+        <button class="btn btn-zen" onclick="nextStep(2)" id="next-1" disabled aria-disabled="true">
+          Next →
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Monthly Income -->
+    <div class="quiz-step" id="step-2" aria-label="Question 2 of 5">
+      <p class="quiz-step-num">Question 2 of 5</p>
+      <h2 class="quiz-question font-display">What's your monthly income?</h2>
+
+      <div class="quiz-options" role="group" aria-label="Monthly income options">
+        <button class="quiz-option" data-value="0" onclick="selectOption(this, 2)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🌱</span>
+          Under $1,000
+        </button>
+        <button class="quiz-option" data-value="1" onclick="selectOption(this, 2)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">💵</span>
+          $1,000 – $3,000
+        </button>
+        <button class="quiz-option" data-value="2" onclick="selectOption(this, 2)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">📈</span>
+          $3,000 – $7,000
+        </button>
+        <button class="quiz-option" data-value="3" onclick="selectOption(this, 2)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🏆</span>
+          $7,000+
+        </button>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;gap:1rem;">
+        <button class="btn btn-ghost" onclick="prevStep(1)">← Back</button>
+        <button class="btn btn-zen" onclick="nextStep(3)" id="next-2" disabled aria-disabled="true">
+          Next →
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Savings -->
+    <div class="quiz-step" id="step-3" aria-label="Question 3 of 5">
+      <p class="quiz-step-num">Question 3 of 5</p>
+      <h2 class="quiz-question font-display">How much savings do you have?</h2>
+
+      <div class="quiz-options" role="group" aria-label="Savings level options" style="grid-template-columns:1fr">
+        <button class="quiz-option" data-value="0" onclick="selectOption(this, 3)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🌱</span>
+          None yet — just starting out
+        </button>
+        <button class="quiz-option" data-value="1" onclick="selectOption(this, 3)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">💰</span>
+          Less than 6 months of expenses
+        </button>
+        <button class="quiz-option" data-value="2" onclick="selectOption(this, 3)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🏦</span>
+          More than 6 months of expenses
+        </button>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;gap:1rem;">
+        <button class="btn btn-ghost" onclick="prevStep(2)">← Back</button>
+        <button class="btn btn-zen" onclick="nextStep(4)" id="next-3" disabled aria-disabled="true">
+          Next →
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: Risk Tolerance -->
+    <div class="quiz-step" id="step-4" aria-label="Question 4 of 5">
+      <p class="quiz-step-num">Question 4 of 5</p>
+      <h2 class="quiz-question font-display">What's your risk tolerance?</h2>
+      <p class="text-secondary" style="margin-bottom:2rem;">Drag to set your comfort with investment risk</p>
+
+      <div class="risk-slider-container">
+        <div style="display:flex;justify-content:space-between;font-size:2rem;margin-bottom:1rem;">
+          <span aria-hidden="true">🛡️</span>
+          <span aria-hidden="true">⚖️</span>
+          <span aria-hidden="true">🚀</span>
+        </div>
+
+        <input
+          type="range"
+          class="risk-slider"
+          id="risk-slider"
+          min="1"
+          max="5"
+          value="3"
+          step="1"
+          oninput="updateRiskDisplay(this.value)"
+          aria-label="Risk tolerance from 1 (Very Safe) to 5 (High Risk)"
+          aria-valuemin="1"
+          aria-valuemax="5"
+          aria-valuenow="3"
+        />
+
+        <div class="risk-labels">
+          <span>Very Safe</span>
+          <span>Balanced</span>
+          <span>High Risk</span>
+        </div>
+
+        <div style="text-align:center;margin-top:1.5rem;">
+          <div id="risk-display" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:var(--color-zen-dim);border:1px solid var(--border-zen);border-radius:var(--radius-xl);">
+            <span id="risk-emoji" style="font-size:1.5rem;" aria-hidden="true">⚖️</span>
+            <span id="risk-label" style="font-weight:600;color:var(--color-zen);">Balanced (3/5)</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;gap:1rem;margin-top:1rem;">
+        <button class="btn btn-ghost" onclick="prevStep(3)">← Back</button>
+        <button class="btn btn-zen" onclick="nextStep(5)">
+          Next →
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 5: Investment Goal -->
+    <div class="quiz-step" id="step-5" aria-label="Question 5 of 5">
+      <p class="quiz-step-num">Question 5 of 5</p>
+      <h2 class="quiz-question font-display">What's your main investment goal?</h2>
+
+      <div class="quiz-options" role="group" aria-label="Investment goal options" style="grid-template-columns:1fr">
+        <button class="quiz-option" data-value="0" onclick="selectOption(this, 5)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🛡️</span>
+          <strong>Capital Safety</strong>
+          <span style="display:block;font-size:0.875rem;margin-top:0.25rem;color:var(--text-muted);">Protect what I have — low risk, steady returns</span>
+        </button>
+        <button class="quiz-option" data-value="1" onclick="selectOption(this, 5)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🌱</span>
+          <strong>Steady Growth</strong>
+          <span style="display:block;font-size:0.875rem;margin-top:0.25rem;color:var(--text-muted);">Balanced approach — moderate risk, consistent growth</span>
+        </button>
+        <button class="quiz-option" data-value="2" onclick="selectOption(this, 5)" aria-pressed="false">
+          <span class="quiz-option-icon" aria-hidden="true">🚀</span>
+          <strong>Aggressive Growth</strong>
+          <span style="display:block;font-size:0.875rem;margin-top:0.25rem;color:var(--text-muted);">Maximize returns — comfortable with higher risk</span>
+        </button>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;gap:1rem;">
+        <button class="btn btn-ghost" onclick="prevStep(4)">← Back</button>
+        <button class="btn btn-gold" onclick="completeOnboarding()" id="next-5" disabled aria-disabled="true">
+          Get My Recommendations 🎯
+        </button>
+      </div>
+    </div>
+
+    <!-- Completion Step -->
+    <div class="quiz-step" id="step-complete" aria-label="Profile complete">
+      <div style="text-align:center;padding:2rem 0;">
+        <div style="font-size:4rem;margin-bottom:1.5rem;" aria-hidden="true">🎉</div>
+        <h2 class="quiz-question font-display">You're all set!</h2>
+        <p class="text-secondary" style="max-width:380px;margin:0 auto 2rem;">
+          We're generating your personalized investment recommendations
+          based on your financial profile.
+        </p>
+        <div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;">
+          <div class="spinner" aria-label="Loading"></div>
+          <span id="completion-msg" style="color:var(--text-secondary);">Analyzing your profile...</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container" role="region" aria-label="Notifications" aria-live="polite"></div>
+
+<!-- Supabase CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  /** Quiz state */
+  const answers = {
+    age_group: null,
+    income_range: null,
+    savings_level: null,
+    risk_tolerance: 3,
+    investment_goal: null
+  };
+
+  const riskEmojis = ['', '🛡️', '🔒', '⚖️', '📈', '🚀'];
+  const riskLabels = ['', 'Very Safe (1/5)', 'Safe (2/5)', 'Balanced (3/5)', 'Growth (4/5)', 'High Risk (5/5)'];
+
+  /**
+   * Select a quiz option card
+   * @param {HTMLElement} el - The clicked option button
+   * @param {number} step - Current step number
+   */
+  function selectOption(el, step) {
+    // Deselect siblings
+    el.closest('.quiz-options').querySelectorAll('.quiz-option').forEach(opt => {
+      opt.classList.remove('selected');
+      opt.setAttribute('aria-pressed', 'false');
+    });
+
+    el.classList.add('selected');
+    el.setAttribute('aria-pressed', 'true');
+
+    const value = parseInt(el.dataset.value, 10);
+
+    // Map step to answer key
+    const keys = { 1: 'age_group', 2: 'income_range', 3: 'savings_level', 5: 'investment_goal' };
+    if (keys[step] !== undefined) {
+      answers[keys[step]] = value;
+    }
+
+    // Enable next button
+    const nextBtn = document.getElementById(`next-${step}`);
+    if (nextBtn) {
+      nextBtn.disabled = false;
+      nextBtn.setAttribute('aria-disabled', 'false');
+    }
+  }
+
+  /**
+   * Advance to the next quiz step
+   * @param {number} step - Target step number
+   */
+  function nextStep(step) {
+    const current = step - 1;
+    document.getElementById(`step-${current}`).classList.remove('active');
+    document.getElementById(`step-${step}`).classList.add('active');
+
+    const progress = (step / 5) * 100;
+    document.getElementById('progress-fill').style.width = `${progress}%`;
+    document.getElementById('step-counter').textContent = `Step ${step} of 5`;
+
+    const progressBar = document.querySelector('[role="progressbar"]');
+    if (progressBar) progressBar.setAttribute('aria-valuenow', String(progress));
+  }
+
+  /**
+   * Go back to the previous quiz step
+   * @param {number} step - Target step number
+   */
+  function prevStep(step) {
+    const current = step + 1;
+    document.getElementById(`step-${current}`).classList.remove('active');
+    document.getElementById(`step-${step}`).classList.add('active');
+
+    const progress = (step / 5) * 100;
+    document.getElementById('progress-fill').style.width = `${progress}%`;
+    document.getElementById('step-counter').textContent = `Step ${step} of 5`;
+  }
+
+  /**
+   * Update the risk display label and emoji
+   * @param {string|number} value - Slider value 1-5
+   */
+  function updateRiskDisplay(value) {
+    const v = parseInt(value, 10);
+    answers.risk_tolerance = v;
+    document.getElementById('risk-emoji').textContent = riskEmojis[v];
+    document.getElementById('risk-label').textContent = riskLabels[v];
+    document.getElementById('risk-slider').setAttribute('aria-valuenow', String(v));
+  }
+
+  /**
+   * Complete onboarding: submit profile and redirect to dashboard
+   */
+  async function completeOnboarding() {
+    // Show completion step
+    document.getElementById('step-5').classList.remove('active');
+    document.getElementById('step-complete').classList.add('active');
+    document.getElementById('step-counter').textContent = 'Finishing up...';
+
+    const API_URL = localStorage.getItem('zenvest_api_url') || 'https://zenvest-api.railway.app';
+    const token   = localStorage.getItem('zenvest_token');
+
+    try {
+      // Save risk profile answers to localStorage for use in app
+      localStorage.setItem('zenvest_profile', JSON.stringify(answers));
+
+      // If we have a token, submit to backend
+      if (token) {
+        document.getElementById('completion-msg').textContent = 'Generating recommendations...';
+        const res = await fetch(`${API_URL}/recommendations`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(answers)
+        });
+
+        if (!res.ok) throw new Error('Failed to fetch recommendations');
+        const data = await res.json();
+        localStorage.setItem('zenvest_recommendations', JSON.stringify(data));
+      }
+    } catch (err) {
+      // Non-blocking: still redirect even if API fails
+      console.warn('Could not load recommendations:', err);
+    } finally {
+      document.getElementById('completion-msg').textContent = 'All done! Redirecting...';
+      setTimeout(() => { window.location.href = 'app.html'; }, 1000);
+    }
+  }
+
+  /**
+   * Skip onboarding quiz and go directly to dashboard
+   */
+  function skipOnboarding() {
+    window.location.href = 'app.html';
+  }
+
+  // Initialize risk display
+  updateRiskDisplay(3);
+</script>
+</body>
+</html>
