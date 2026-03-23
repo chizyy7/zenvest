@@ -95,7 +95,7 @@ export async function signInWithGoogle() {
   return await client.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${window.location.origin}/zenvest/app.html`
+      redirectTo: `${window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '')}/app.html`
     }
   });
 }
@@ -109,7 +109,7 @@ export async function resetPassword(email) {
   const client = initSupabase();
   if (!client) return { data: null, error: new Error('Supabase not initialized') };
   return await client.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/zenvest/login.html`
+    redirectTo: `${window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '')}/login.html`
   });
 }
 
@@ -122,7 +122,7 @@ export async function signOut() {
   if (client) await client.auth.signOut();
   localStorage.removeItem('zenvest_token');
   localStorage.removeItem('zenvest_user');
-  window.location.href = 'login.html';
+  window.location.href = 'index.html';
 }
 
 /**
