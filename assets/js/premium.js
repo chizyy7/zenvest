@@ -6,7 +6,7 @@
 import { getToken, getCurrentUser } from './auth.js';
 import { showToast as toast } from './utils.js';
 
-const API_URL = window.API_URL || 'https://zenvest-api.railway.app';
+const API_URL = window.API_URL || 'https://zenvest-production.up.railway.app';
 
 // Paystack public key (test key — replace with live key for production)
 const PAYSTACK_PUBLIC_KEY = window.PAYSTACK_PUBLIC_KEY || 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY';

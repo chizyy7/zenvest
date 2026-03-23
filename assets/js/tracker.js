@@ -6,7 +6,7 @@
 import { getToken } from './auth.js';
 import { escapeHtml, showToast as toast } from './utils.js';
 
-const API_URL = window.API_URL || 'https://zenvest-api.railway.app';
+const API_URL = window.API_URL || 'https://zenvest-production.up.railway.app';
 
 /** @type {Array<Object>} In-memory cache of transactions */
 let transactions = [];
