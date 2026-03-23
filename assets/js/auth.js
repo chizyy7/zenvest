@@ -11,7 +11,7 @@ let supabase = null;
 // Supabase credentials stored in environment / page config
 // ============================================================
 const SUPABASE_URL = window.SUPABASE_URL || 'https://qdazhhqahfcgsighktru.supabase.co';
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'sb_publishable_0sfZyOzxAQdR1Pv30hHbyg_5xQ1cxCZ';
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkYXpoaHFhaGZjZ3NpZ2hrdHJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNTA0NDQsImV4cCI6MjA4OTgyNjQ0NH0._Dg2vxIYlVlle_VW2BjYvlm1osOMIGaH5Und-5xmdrs';
 const API_URL = window.API_URL || 'https://zenvest-api.railway.app';
 
 /**
