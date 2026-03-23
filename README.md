@@ -17,29 +17,28 @@ Zenvest is a full-stack personal finance and investment platform featuring:
 
 ```
 zenvest/
-├── frontend/               # Static HTML/CSS/JS (GitHub Pages)
-│   ├── index.html          # Landing page
-│   ├── login.html          # Auth page (login + signup)
-│   ├── onboarding.html     # Financial profile quiz
-│   ├── app.html            # Main dashboard
-│   ├── premium.html        # Premium upgrade page
-│   └── assets/
-│       ├── css/
-│       │   ├── style.css        # Design system + tokens
-│       │   ├── dashboard.css    # App layout
-│       │   ├── components.css   # UI components
-│       │   └── responsive.css   # Mobile breakpoints
-│       └── js/
-│           ├── app.js           # Main orchestrator
-│           ├── auth.js          # Supabase auth
-│           ├── tracker.js       # Transaction CRUD
-│           ├── charts.js        # Chart.js visualizations
-│           ├── goals.js         # Goals CRUD
-│           ├── networth.js      # Net worth tracker
-│           ├── ai.js            # AI chat interface
-│           ├── investments.js   # Recommendations
-│           ├── premium.js       # Paystack integration
-│           └── reports.js       # PDF reports
+├── index.html          # Landing page
+├── login.html          # Auth page (login + signup)
+├── onboarding.html     # Financial profile quiz
+├── app.html            # Main dashboard
+├── premium.html        # Premium upgrade page
+├── assets/
+│   ├── css/
+│   │   ├── style.css        # Design system + tokens
+│   │   ├── dashboard.css    # App layout
+│   │   ├── components.css   # UI components
+│   │   └── responsive.css   # Mobile breakpoints
+│   └── js/
+│       ├── app.js           # Main orchestrator
+│       ├── auth.js          # Supabase auth
+│       ├── tracker.js       # Transaction CRUD
+│       ├── charts.js        # Chart.js visualizations
+│       ├── goals.js         # Goals CRUD
+│       ├── networth.js      # Net worth tracker
+│       ├── ai.js            # AI chat interface
+│       ├── investments.js   # Recommendations
+│       ├── premium.js       # Paystack integration
+│       └── reports.js       # PDF reports
 └── backend/                # Python FastAPI (Railway)
     ├── main.py             # App entry point
     ├── requirements.txt    # Python dependencies
@@ -68,13 +67,13 @@ zenvest/
 
 The frontend is pure static HTML/CSS/JS — no build step needed.
 
-1. Configure your Supabase credentials in `frontend/assets/js/auth.js`:
+1. Configure your Supabase credentials in `assets/js/auth.js`:
    ```js
    const SUPABASE_URL = 'https://your-project.supabase.co';
    const SUPABASE_ANON_KEY = 'your-anon-key';
    ```
 
-2. Set your API URL in `frontend/assets/js/app.js`:
+2. Set your API URL in `assets/js/app.js`:
    ```js
    const API_URL = 'https://zenvest-api.railway.app';
    ```
@@ -99,14 +98,34 @@ uvicorn main:app --reload --port 8000
 
 The API will be available at `http://localhost:8000`. Interactive docs at `/docs`.
 
+### Deploy Backend to Railway
+
+1. Create a free account at [railway.app](https://railway.app)
+2. Click **New Project → Deploy from GitHub repo**
+3. Select this repository and set the root directory to `backend/`
+4. Railway will auto-detect the Python/FastAPI app
+5. Go to **Variables** and add all environment variables from `.env.example`
+6. Under **Settings → Networking**, generate a public domain (e.g. `zenvest-api.railway.app`)
+7. Update `assets/js/app.js` with your Railway API URL:
+   ```js
+   const API_URL = 'https://your-project.railway.app';
+   ```
+
 ---
 
 ## 🗄️ Database Setup (Supabase)
 
-1. Create a new Supabase project
-2. Go to **SQL Editor** and run `backend/schema.sql`
-3. Enable Google OAuth in **Authentication → Providers**
-4. Copy your project URL, anon key, service key, and JWT secret to `.env`
+1. Create a free account at [supabase.com](https://supabase.com) and create a new project
+2. Go to **SQL Editor** and run the contents of `backend/schema.sql`
+3. Enable Google OAuth in **Authentication → Providers → Google**
+   - Add your Google Client ID and Secret (from [Google Cloud Console](https://console.cloud.google.com))
+4. Under **Project Settings → API**, copy:
+   - **Project URL** → `SUPABASE_URL`
+   - **anon public** key → `SUPABASE_ANON_KEY`
+   - **service_role** key → `SUPABASE_SERVICE_KEY`
+   - **JWT Secret** → `SUPABASE_JWT_SECRET`
+5. Paste the URL and anon key into `assets/js/auth.js`
+6. Paste all four values into `backend/.env`
 
 ---
 
