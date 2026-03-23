@@ -10,8 +10,8 @@ let supabase = null;
 // Configuration
 // Supabase credentials stored in environment / page config
 // ============================================================
-const SUPABASE_URL = window.SUPABASE_URL || 'https://YOUR_PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'YOUR_ANON_KEY';
+const SUPABASE_URL = window.SUPABASE_URL || 'https://qdazhhqahfcgsighktru.supabase.co';
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'sb_secret_Xqz8iH2yADfrO1q_GTnOFQ_jrNHajKw';
 const API_URL = window.API_URL || 'https://zenvest-api.railway.app';
 
 /**
