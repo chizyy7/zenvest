@@ -164,4 +164,4 @@ The API will be available at `http://localhost:8000`. Interactive docs at `/docs
 
 ## 📄 License
 
-MIT License — © 2024 Zenvest
+MIT License — © 2026 Zenvest
