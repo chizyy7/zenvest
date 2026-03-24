@@ -10,14 +10,14 @@ import logging
 import os
 from contextlib import asynccontextmanager
 
-from routes.transactions import router as transactions_router
-from routes.goals import router as goals_router
-from routes.networth import router as networth_router
-from routes.recommendations import router as recommendations_router
-from routes.insights import router as insights_router
-from routes.reports import router as reports_router
-from routes.webhook import router as webhook_router
-from routes.auth import router as auth_router
+from backend.routes.transactions import router as transactions_router
+from backend.routes.goals import router as goals_router
+from backend.routes.networth import router as networth_router
+from backend.routes.recommendations import router as recommendations_router
+from backend.routes.insights import router as insights_router
+from backend.routes.reports import router as reports_router
+from backend.routes.webhook import router as webhook_router
+from backend.routes.auth import router as auth_router
 
 # ============================================================
 # Logging
@@ -53,22 +53,10 @@ app = FastAPI(
 # ============================================================
 # CORS
 # ============================================================
-ALLOWED_ORIGINS = [
-    "https://chizyy7.github.io",
-    "http://localhost:3000",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
-    "http://localhost:8080",
-    "null",  # file:// protocol for local dev
-]
-
-if os.getenv("ENVIRONMENT") != "production":
-    ALLOWED_ORIGINS.append("*")
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

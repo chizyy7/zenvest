@@ -15,7 +15,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-from utils.deps import get_current_user_id, get_supabase, require_premium
+from backend.utils.deps import get_current_user_id, get_supabase, require_premium
 
 logger = logging.getLogger("zenvest.reports")
 router = APIRouter()

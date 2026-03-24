@@ -8,7 +8,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-from utils.deps import get_current_user_id, get_supabase, not_found, bad_request
+from backend.utils.deps import get_current_user_id, get_supabase, not_found, bad_request
 
 logger = logging.getLogger("zenvest.networth")
 router = APIRouter()
