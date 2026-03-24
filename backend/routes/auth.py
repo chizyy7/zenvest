@@ -6,7 +6,7 @@ import logging
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
-from utils.deps import get_current_user, get_current_user_id, get_supabase
+from backend.utils.deps import get_current_user, get_current_user_id, get_supabase
 
 logger = logging.getLogger("zenvest.auth")
 router = APIRouter()

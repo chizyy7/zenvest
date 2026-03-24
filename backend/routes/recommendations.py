@@ -8,8 +8,8 @@ from typing import Optional
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-from utils.deps import get_current_user_id, get_supabase, get_current_user
-from ml.recommender import get_recommendations
+from backend.utils.deps import get_current_user_id, get_supabase, get_current_user
+from backend.ml.recommender import get_recommendations
 
 logger = logging.getLogger("zenvest.recommendations")
 router = APIRouter()

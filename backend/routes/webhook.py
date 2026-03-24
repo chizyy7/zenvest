@@ -11,7 +11,7 @@ import os
 from fastapi import APIRouter, Request, HTTPException, Depends
 from pydantic import BaseModel
 
-from utils.deps import get_supabase, get_current_user_id, get_current_user
+from backend.utils.deps import get_supabase, get_current_user_id, get_current_user
 
 logger = logging.getLogger("zenvest.webhook")
 router = APIRouter()
