@@ -3,13 +3,13 @@
  * Handles upgrading users to premium via Paystack
  */
 
-import { getToken, getCurrentUser } from './auth.js';
+import { getToken, getCurrentUser, getSupabase } from './auth.js';
 import { showToast as toast } from './utils.js';
 
 const API_URL = window.API_URL || 'https://zenvest-production.up.railway.app';
 
 // Paystack public key (test key — replace with live key for production)
-const PAYSTACK_PUBLIC_KEY = window.PAYSTACK_PUBLIC_KEY || 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY';
+const PAYSTACK_PUBLIC_KEY = 'pk_test_04b090cd1cc8ab38d07e6e90d7c4cfe9dd4fd8d9';
 
 // Pricing in cents
 const PRICES = {
@@ -20,31 +20,37 @@ const PRICES = {
 // toast imported from utils.js above
 
 /**
- * Verify a completed Paystack payment with the backend
+ * Update user to premium in Supabase after successful payment
+ * @param {string} userId - The user's ID
  * @param {string} reference - Paystack payment reference
- * @returns {Promise<boolean>}
  */
-async function verifyPayment(reference) {
-  const token = await getToken();
-  if (!token) return false;
+async function upgradeToPremium(userId, reference) {
+  const supabase = getSupabase();
 
-  try {
-    const res = await fetch(`${API_URL}/webhook/verify`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ reference })
-    });
+  const { error } = await supabase
+    .from('users')
+    .update({
+      is_premium: true,
+      premium_since: new Date().toISOString(),
+      paystack_reference: reference
+    })
+    .eq('id', userId);
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    return data.success === true;
-  } catch (err) {
-    console.error('Payment verification error:', err);
-    return false;
+  if (!error) {
+    showPremiumSuccess();
+    setTimeout(() => window.location.reload(), 2000);
+  } else {
+    console.error('Failed to upgrade to premium:', error);
+    toast('Payment received but profile update failed. Please contact support.', 'error');
   }
+}
+
+/**
+ * Show a success message and unlock premium features in the UI
+ */
+function showPremiumSuccess() {
+  unlockPremiumFeatures();
+  toast('🎉 Payment successful! Welcome to Premium!', 'success');
 }
 
 /**
@@ -114,23 +120,8 @@ export async function initPremiumPayment(plan = 'monthly') {
       ]
     },
     callback: async function(response) {
-      toast('Payment received! Verifying...', 'info');
-
-      const success = await verifyPayment(response.reference);
-
-      if (success) {
-        unlockPremiumFeatures();
-        // Redirect to dashboard after brief delay
-        setTimeout(() => {
-          if (window.location.pathname.includes('premium.html')) {
-            window.location.href = 'app.html';
-          }
-        }, 2000);
-      } else {
-        // Even if verification fails, still unlock (can verify server-side via webhook)
-        unlockPremiumFeatures();
-        console.warn('Payment verification returned false — payment may still be valid');
-      }
+      console.log('Payment successful:', response.reference);
+      upgradeToPremium(user.id, response.reference);
     },
     onClose: function() {
       toast('Payment cancelled. You can upgrade anytime! 💎', 'info');
