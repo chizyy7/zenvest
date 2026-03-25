@@ -26,6 +26,14 @@ function initSupabase() {
 }
 
 /**
+ * Get the initialized Supabase client
+ * @returns {import('@supabase/supabase-js').SupabaseClient}
+ */
+export function getSupabase() {
+  return initSupabase();
+}
+
+/**
  * Get the current authenticated session
  * @returns {Promise<import('@supabase/supabase-js').Session|null>}
  */

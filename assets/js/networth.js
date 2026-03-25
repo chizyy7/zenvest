@@ -3,11 +3,9 @@
  * Handles CRUD for net worth snapshots and animated display
  */
 
-import { getToken } from './auth.js';
+import { getSupabase } from './auth.js';
 import { renderNetWorthChart } from './charts.js';
 import { escapeHtml, showToast as toast } from './utils.js';
-
-const API_URL = window.API_URL || 'https://zenvest-production.up.railway.app';
 
 /** @type {Array<Object>} Net worth snapshots cache */
 let snapshots = [];
@@ -42,20 +40,25 @@ function animateCountUp(el, start, end, duration = 1000) {
 }
 
 /**
- * Fetch net worth snapshots from the API
+ * Fetch net worth snapshots from Supabase
  * @returns {Promise<Array<Object>>}
  */
 export async function fetchNetWorthSnapshots() {
-  const token = await getToken();
-  if (!token) return [];
+  const supabase = getSupabase();
+  if (!supabase) return [];
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
 
   try {
-    const res = await fetch(`${API_URL}/networth`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    snapshots = Array.isArray(data) ? data : data.snapshots || [];
+    const { data, error } = await supabase
+      .from('net_worth_snapshots')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('snapshot_date', { ascending: false });
+
+    if (error) throw error;
+    snapshots = data || [];
     return snapshots;
   } catch (err) {
     console.error('Failed to fetch net worth:', err);
@@ -69,22 +72,36 @@ export async function fetchNetWorthSnapshots() {
  * @returns {Promise<Object|null>}
  */
 export async function saveNetWorthSnapshot(snapshotData) {
-  const token = await getToken();
-  if (!token) return null;
+  const supabase = getSupabase();
+  if (!supabase) return null;
 
-  const res = await fetch(`${API_URL}/networth`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(snapshotData)
-  });
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const snapshot = await res.json();
-  snapshots.push(snapshot);
-  return snapshot;
+  const netWorth = (snapshotData.total_assets || 0) - (snapshotData.total_liabilities || 0);
+
+  const { data, error } = await supabase
+    .from('net_worth_snapshots')
+    .insert([{
+      user_id: user.id,
+      savings: snapshotData.savings,
+      investments: snapshotData.investments,
+      crypto: snapshotData.crypto,
+      property: snapshotData.property,
+      loans: snapshotData.loans,
+      credit_cards: snapshotData.credit_cards,
+      other_debt: snapshotData.other_debt,
+      total_assets: snapshotData.total_assets,
+      total_liabilities: snapshotData.total_liabilities,
+      net_worth: netWorth,
+      snapshot_date: new Date().toISOString().split('T')[0]
+    }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  snapshots.push(data);
+  return data;
 }
 
 /**
