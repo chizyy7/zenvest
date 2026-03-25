@@ -86,6 +86,59 @@ function unlockPremiumFeatures() {
 }
 
 /**
+ * Initialize a Paystack payment popup (simplified form used by upgrade button)
+ * @param {string} userEmail - The user's email address
+ * @param {string} userId - The user's ID
+ */
+export function initializePaystackPayment(userEmail, userId) {
+  const handler = window.PaystackPop.setup({
+    key:      PAYSTACK_PUBLIC_KEY,
+    email:    userEmail,
+    amount:   79900,
+    currency: 'USD',
+    ref:      'ZV_' + new Date().getTime(),
+    callback: function(response) {
+      console.log('Payment successful', response);
+      handlePaymentSuccess(response, userId);
+    },
+    onClose: function() {
+      console.log('Payment window closed');
+    }
+  });
+
+  handler.openIframe();
+}
+
+/**
+ * Handle a successful Paystack payment by upgrading the user in Supabase
+ * @param {object} response - Paystack response object
+ * @param {string} userId - The user's ID
+ */
+async function handlePaymentSuccess(response, userId) {
+  try {
+    const supabase = getSupabase();
+    const { error } = await supabase
+      .from('users')
+      .update({
+        is_premium: true,
+        premium_since: new Date().toISOString(),
+        paystack_reference: response.reference
+      })
+      .eq('id', userId);
+
+    if (!error) {
+      toast('🎉 Welcome to Premium!', 'success');
+      setTimeout(() => window.location.reload(), 2000);
+    } else {
+      console.error('Failed to update premium status:', error);
+      toast('Payment received but profile update failed. Please contact support.', 'error');
+    }
+  } catch (err) {
+    console.error('Error upgrading:', err);
+  }
+}
+
+/**
  * Initialize a Paystack payment popup
  * @param {string} plan - 'monthly' | 'annual'
  */
@@ -119,7 +172,7 @@ export async function initPremiumPayment(plan = 'monthly') {
         { display_name: 'User ID', variable_name: 'user_id', value: user.id }
       ]
     },
-    callback: async function(response) {
+    callback: function(response) {
       console.log('Payment successful:', response.reference);
       upgradeToPremium(user.id, response.reference);
     },
@@ -140,6 +193,18 @@ window.initPaystack = function() {
 };
 
 window.initPremiumPayment = initPremiumPayment;
+
+// ============================================================
+// Upgrade button event listener
+// ============================================================
+document.querySelector('.upgrade-btn')
+  ?.addEventListener('click', async () => {
+    const supabase = getSupabase();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      initializePaystackPayment(user.email, user.id);
+    }
+  });
 
 // ============================================================
 // Initialization — check premium status on load
