@@ -3,10 +3,8 @@
  * Manages creating, updating, and rendering goal progress cards
  */
 
-import { getToken } from './auth.js';
+import { getSupabase } from './auth.js';
 import { escapeHtml, showToast as toast } from './utils.js';
-
-const API_URL = window.API_URL || 'https://zenvest-production.up.railway.app';
 
 /** @type {Array<Object>} In-memory goals cache */
 let goals = [];
@@ -35,20 +33,25 @@ function getDaysRemaining(deadline) {
 // escapeHtml and toast imported from utils.js above
 
 /**
- * Fetch goals from the API
+ * Fetch goals from Supabase
  * @returns {Promise<Array<Object>>}
  */
 export async function fetchGoals() {
-  const token = await getToken();
-  if (!token) return [];
+  const supabase = getSupabase();
+  if (!supabase) return [];
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
 
   try {
-    const res = await fetch(`${API_URL}/goals`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    goals = Array.isArray(data) ? data : data.goals || [];
+    const { data, error } = await supabase
+      .from('goals')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    goals = data || [];
     return goals;
   } catch (err) {
     console.error('Failed to fetch goals:', err);
@@ -62,22 +65,29 @@ export async function fetchGoals() {
  * @returns {Promise<Object|null>}
  */
 export async function createGoal(goalData) {
-  const token = await getToken();
-  if (!token) return null;
+  const supabase = getSupabase();
+  if (!supabase) return null;
 
-  const res = await fetch(`${API_URL}/goals`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(goalData)
-  });
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const goal = await res.json();
-  goals.unshift(goal);
-  return goal;
+  const { data, error } = await supabase
+    .from('goals')
+    .insert([{
+      user_id: user.id,
+      name: goalData.name,
+      category: goalData.category,
+      target_amount: parseFloat(goalData.target_amount),
+      current_amount: parseFloat(goalData.current_amount) || 0,
+      deadline: goalData.deadline || null,
+      created_at: new Date().toISOString()
+    }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  goals.unshift(data);
+  return data;
 }
 
 /**
@@ -87,23 +97,27 @@ export async function createGoal(goalData) {
  * @returns {Promise<Object|null>}
  */
 export async function updateGoal(id, updates) {
-  const token = await getToken();
-  if (!token) return null;
+  const supabase = getSupabase();
+  if (!supabase) return null;
 
-  const res = await fetch(`${API_URL}/goals/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(updates)
-  });
+  const payload = {};
+  if (updates.name       !== undefined) payload.name           = updates.name;
+  if (updates.category   !== undefined) payload.category       = updates.category;
+  if (updates.target_amount  !== undefined) payload.target_amount  = parseFloat(updates.target_amount);
+  if (updates.current_amount !== undefined) payload.current_amount = parseFloat(updates.current_amount);
+  if (updates.deadline   !== undefined) payload.deadline       = updates.deadline || null;
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const updated = await res.json();
+  const { data, error } = await supabase
+    .from('goals')
+    .update(payload)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
   const idx = goals.findIndex(g => g.id === id);
-  if (idx !== -1) goals[idx] = updated;
-  return updated;
+  if (idx !== -1) goals[idx] = data;
+  return data;
 }
 
 /**
@@ -112,15 +126,15 @@ export async function updateGoal(id, updates) {
  * @returns {Promise<boolean>}
  */
 export async function deleteGoal(id) {
-  const token = await getToken();
-  if (!token) return false;
+  const supabase = getSupabase();
+  if (!supabase) return false;
 
-  const res = await fetch(`${API_URL}/goals/${id}`, {
-    method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  const { error } = await supabase
+    .from('goals')
+    .delete()
+    .eq('id', id);
 
-  if (!res.ok) return false;
+  if (error) return false;
   goals = goals.filter(g => g.id !== id);
   return true;
 }

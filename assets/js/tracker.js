@@ -3,10 +3,8 @@
  * Handles adding, editing, deleting, and displaying transactions
  */
 
-import { getToken } from './auth.js';
+import { getSupabase } from './auth.js';
 import { escapeHtml, showToast as toast } from './utils.js';
-
-const API_URL = window.API_URL || 'https://zenvest-production.up.railway.app';
 
 /** @type {Array<Object>} In-memory cache of transactions */
 let transactions = [];
@@ -62,24 +60,28 @@ function formatDateLabel(dateStr) {
 }
 
 /**
- * Fetch all transactions for the current user from the API
+ * Fetch all transactions for the current user from Supabase
  * @returns {Promise<Array<Object>>}
  */
 export async function fetchTransactions() {
-  const token = await getToken();
-  if (!token) return [];
+  const supabase = getSupabase();
+  if (!supabase) return [];
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
 
   try {
-    const res = await fetch(`${API_URL}/transactions`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    transactions = Array.isArray(data) ? data : data.transactions || [];
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('date', { ascending: false });
+
+    if (error) throw error;
+    transactions = data || [];
     return transactions;
   } catch (err) {
     console.error('Failed to fetch transactions:', err);
-    // Return cached or empty
     return transactions;
   }
 }
@@ -90,22 +92,29 @@ export async function fetchTransactions() {
  * @returns {Promise<Object|null>}
  */
 export async function addTransaction(txData) {
-  const token = await getToken();
-  if (!token) return null;
+  const supabase = getSupabase();
+  if (!supabase) return null;
 
-  const res = await fetch(`${API_URL}/transactions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(txData)
-  });
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const newTx = await res.json();
-  transactions.unshift(newTx);
-  return newTx;
+  const { data, error } = await supabase
+    .from('transactions')
+    .insert([{
+      user_id: user.id,
+      type: txData.type,
+      amount: parseFloat(txData.amount),
+      category: txData.category,
+      description: txData.description,
+      date: txData.date,
+      created_at: new Date().toISOString()
+    }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  transactions.unshift(data);
+  return data;
 }
 
 /**
@@ -115,23 +124,26 @@ export async function addTransaction(txData) {
  * @returns {Promise<Object|null>}
  */
 export async function updateTransaction(id, txData) {
-  const token = await getToken();
-  if (!token) return null;
+  const supabase = getSupabase();
+  if (!supabase) return null;
 
-  const res = await fetch(`${API_URL}/transactions/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(txData)
-  });
+  const { data, error } = await supabase
+    .from('transactions')
+    .update({
+      type: txData.type,
+      amount: parseFloat(txData.amount),
+      category: txData.category,
+      description: txData.description,
+      date: txData.date
+    })
+    .eq('id', id)
+    .select()
+    .single();
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const updated = await res.json();
+  if (error) throw error;
   const idx = transactions.findIndex(t => t.id === id);
-  if (idx !== -1) transactions[idx] = updated;
-  return updated;
+  if (idx !== -1) transactions[idx] = data;
+  return data;
 }
 
 /**
@@ -140,15 +152,15 @@ export async function updateTransaction(id, txData) {
  * @returns {Promise<boolean>}
  */
 export async function deleteTransaction(id) {
-  const token = await getToken();
-  if (!token) return false;
+  const supabase = getSupabase();
+  if (!supabase) return false;
 
-  const res = await fetch(`${API_URL}/transactions/${id}`, {
-    method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  const { error } = await supabase
+    .from('transactions')
+    .delete()
+    .eq('id', id);
 
-  if (!res.ok) return false;
+  if (error) return false;
   transactions = transactions.filter(t => t.id !== id);
   return true;
 }
