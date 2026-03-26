@@ -154,5 +154,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Export for use in other modules
-export { sendMessage, sendMessageToGemini };
+// Aliases for HTML onclick handlers
+window.sendAiMessage = sendMessage;
+window.sendQuickMessage = function(message) {
+  const input = document.querySelector('#ai-input')
+    || document.querySelector('.ai-input')
+    || document.querySelector('textarea');
+  if (input) {
+    input.value = message;
+    sendMessage();
+  } else {
+    console.warn('sendQuickMessage: no AI input element found');
+  }
+};
