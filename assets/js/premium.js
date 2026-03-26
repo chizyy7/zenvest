@@ -11,10 +11,10 @@ const API_URL = window.API_URL || 'https://zenvest-production.up.railway.app';
 // Paystack public key (test key — replace with live key for production)
 const PAYSTACK_PUBLIC_KEY = 'pk_test_04b090cd1cc8ab38d07e6e90d7c4cfe9dd4fd8d9';
 
-// Pricing in cents
+// Pricing (monthly in NGN × 100 = kobo for Paystack; annual kept in USD cents)
 const PRICES = {
-  monthly: 799,     // $7.99
-  annual:  5999     // $59.99
+  monthly: 12000,   // 12000 × 100 = 1,200,000 kobo (test price ≈ $0.79)
+  annual:  5999     // $59.99 in cents
 };
 
 // toast imported from utils.js above
@@ -94,8 +94,8 @@ export function initializePaystackPayment(userEmail, userId) {
   const handler = window.PaystackPop.setup({
     key:      PAYSTACK_PUBLIC_KEY,
     email:    userEmail,
-    amount:   79900,
-    currency: 'USD',
+    amount:   1200000,
+    currency: 'NGN',
     ref:      'ZV_' + new Date().getTime(),
     callback: function(response) {
       console.log('Payment successful', response);
@@ -163,8 +163,8 @@ export async function initPremiumPayment(plan = 'monthly') {
   const handler = window.PaystackPop.setup({
     key:      PAYSTACK_PUBLIC_KEY,
     email:    user.email,
-    amount:   amount * 100, // Paystack uses kobo/cents
-    currency: 'USD',
+    amount:   amount * 100, // Paystack uses kobo
+    currency: 'NGN',
     ref,
     metadata: {
       custom_fields: [
