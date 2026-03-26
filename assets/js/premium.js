@@ -117,24 +117,30 @@ export function initializePaystackPayment(userEmail, userId) {
 async function handlePaymentSuccess(response, userId) {
   try {
     const supabase = getSupabase();
-    const { error } = await supabase
+
+    console.log('Upgrading user:', userId);
+
+    const { data, error } = await supabase
       .from('users')
       .update({
         is_premium: true,
         premium_since: new Date().toISOString(),
         paystack_reference: response.reference
       })
-      .eq('id', userId);
+      .eq('id', userId)
+      .select();
+
+    console.log('Update result:', data, error);
 
     if (!error) {
-      toast('🎉 Welcome to Premium!', 'success');
-      setTimeout(() => window.location.reload(), 2000);
+      alert('🎉 Welcome to Premium! Refreshing...');
+      setTimeout(() => window.location.reload(), 1500);
     } else {
-      console.error('Failed to update premium status:', error);
-      toast('Payment received but profile update failed. Please contact support.', 'error');
+      console.error('Upgrade failed:', error);
+      alert('Payment received but upgrade failed. Contact support.');
     }
   } catch (err) {
-    console.error('Error upgrading:', err);
+    console.error('Error:', err);
   }
 }
 
