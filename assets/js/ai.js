@@ -18,6 +18,18 @@ async function callGemini(message) {
   return json.candidates[0].content.parts[0].text;
 }
 
+function appendMessage(container, text, cssClass, id) {
+  const div = document.createElement('div');
+  div.className = cssClass;
+  if (id) div.id = id;
+  const p = document.createElement('p');
+  p.textContent = text;
+  div.appendChild(p);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+
 window.sendAiMessage = async function() {
   const input = document.querySelector('#ai-input');
   const messages = document.querySelector('#ai-messages') 
@@ -29,11 +41,9 @@ window.sendAiMessage = async function() {
   const userMsg = input.value.trim();
   input.value = '';
 
-  // Add user message to chat
   if (messages) {
-    messages.innerHTML += `<div class="message user-message"><p>${userMsg}</p></div>`;
-    messages.innerHTML += `<div id="typing" class="message zen-message"><p>Zen is thinking... 💭</p></div>`;
-    messages.scrollTop = messages.scrollHeight;
+    appendMessage(messages, userMsg, 'message user-message');
+    appendMessage(messages, 'Zen is thinking... 💭', 'message zen-message', 'typing');
   }
 
   try {
@@ -41,13 +51,16 @@ window.sendAiMessage = async function() {
     const typing = document.querySelector('#typing');
     if (typing) typing.remove();
     if (messages) {
-      messages.innerHTML += `<div class="message zen-message"><p>${reply}</p></div>`;
-      messages.scrollTop = messages.scrollHeight;
+      appendMessage(messages, reply, 'message zen-message');
     }
   } catch (err) {
     console.error('Gemini error:', err);
     const typing = document.querySelector('#typing');
-    if (typing) typing.outerHTML = `<div class="message zen-message"><p>Sorry, something went wrong. Try again!</p></div>`;
+    if (typing) {
+      typing.removeAttribute('id');
+      const p = typing.querySelector('p');
+      if (p) p.textContent = 'Sorry, something went wrong. Try again!';
+    }
   }
 }
 
