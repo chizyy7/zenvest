@@ -1,66 +1,51 @@
 const GEMINI_API_KEY = 'AIzaSyCcZqHLgZZ_F1mjDXSMtKZzrEJL03LKkNc';
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_API_KEY;
-
-const SYSTEM_PROMPT = `You are Zen, a friendly and knowledgeable personal financial advisor inside the Zenvest app. 
-You help users with:
-- Budget tracking and spending analysis
-- Investment recommendations
-- Savings strategies
-- Financial goal setting
-- Understanding their net worth
-
-Keep responses concise, friendly and actionable.
-Always relate advice to personal finance.
-Use emojis occasionally to stay friendly.
-Never give specific stock picks — give general advice.
-If asked something unrelated to finance, politely redirect.`;
-
-let chatHistory = [];
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 async function sendMessageToGemini(userMessage) {
-  chatHistory.push({
-    role: 'user',
-    parts: [{ text: userMessage }]
-  });
-
   const body = {
-    system_instruction: {
-      parts: [{ text: SYSTEM_PROMPT }]
-    },
-    contents: chatHistory
+    contents: [
+      {
+        parts: [
+          {
+            text: `You are Zen, a friendly personal financial advisor for Zenvest app. 
+Help users with budgeting, investments, savings and financial goals. 
+Keep responses short, friendly and practical. Use emojis occasionally.
+
+User message: ${userMessage}`
+          }
+        ]
+      }
+    ],
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 500
+    }
   };
 
   try {
     const response = await fetch(GEMINI_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(body)
     });
 
-    if (!response.ok) {
-      throw new Error('Gemini API error: ' + response.status);
+    console.log('Gemini status:', response.status);
+    const data = await response.json();
+    console.log('Gemini response:', data);
+
+    if (data.error) {
+      console.error('Gemini error:', data.error);
+      return "Sorry, I'm having trouble right now. Try again! 🙏";
     }
 
-    const data = await response.json();
-    const reply = data.candidates[0].content.parts[0].text;
-
-    chatHistory.push({
-      role: 'model',
-      parts: [{ text: reply }]
-    });
-
-    return reply;
+    return data.candidates?.[0]?.content?.parts?.[0]?.text
+      ?? "Sorry, I couldn't generate a response. Try again! 🙏";
 
   } catch (error) {
-    console.error('Gemini error:', error);
-    return "I'm having a moment — let me gather my thoughts. Try asking again! 🙏";
-  }
-}
-
-// Keep chat history to max 20 messages to save tokens
-function trimChatHistory() {
-  if (chatHistory.length > 20) {
-    chatHistory = chatHistory.slice(-20);
+    console.error('Fetch error:', error);
+    return "Connection issue. Please try again! 🙏";
   }
 }
 
@@ -83,7 +68,6 @@ async function sendMessage() {
   const typingEl = showTypingIndicator(messagesContainer);
 
   // Get Gemini response
-  trimChatHistory();
   const reply = await sendMessageToGemini(userMessage);
 
   // Remove typing indicator and show reply
